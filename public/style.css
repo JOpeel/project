@@ -1,0 +1,79 @@
+html * {
+    font-family: Helvetica !important;
+    font-size: 1em !important;
+  }
+  
+  body {
+    width: 500px;
+    margin: 24px auto;
+    background-image: url("image.jpg");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+  }
+  
+  .container {
+    border-radius: 12px;
+    background-color: white;
+    padding: 24px;
+  }
+  
+  div.elem-group {
+    margin: 20px 0;
+  }
+  
+  div.elem-group.inlined {
+    width: 49%;
+    display: inline-block;
+    float: left;
+    margin-left: 1%;
+    margin-top: 0;
+  }
+  
+  label {
+    display: block;
+    padding-bottom: 10px;
+    font-size: 1.25em;
+  }
+  
+  input, select, textarea {
+    border-radius: 8px;
+    border: 1px solid #cccccc;
+    box-sizing: border-box;
+    font-size: 1.25em;
+    width: 100%;
+    padding: 10px;
+  }
+  
+  div.elem-group.inlined input {
+    width: 95%;
+    display: inline-block;
+  }
+  
+  textarea {
+    height: 250px;
+  }
+  
+  hr {
+    border: 1px dotted #ccc;
+  }
+  
+  button {
+    background:#094887;
+    border: none;
+    color: white;
+    font-size: 1.25em;
+    font-family: 'Nanum Gothic';
+    border-radius: 8px;
+    cursor: pointer;
+    padding: 12px;
+  }
+  
+  .button-display {
+    display: block;
+    margin: auto;
+  }
+  
+  button:hover {
+    background:#2f75ba;
+  }

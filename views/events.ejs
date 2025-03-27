@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <style>
+      *{font-size: 30px}
+    </style>
+    
+</head>
+<body>
+  
+    <div class="container-fluid">
+      <h1 id="test">
+        Events
+      </h1>
+      <p1>
+        <i>
+          In the next 48 hours
+        </i>
+      </p1>
+    <div class="d-flex align-items-start">
+        <div class="nav flex-column nav-pills me-3" role="tablist" aria-orientation="vertical" id="eventbuttons">
+          
+          <% events.forEach(function(event, index){ %>
+            <button class="nav-link" id="v-pills-event-tab_<%= event.name%>" data-bs-toggle="pill" data-bs-target="#v-pills-eventdesc_<%= event.name%>" type="button" role="tab" aria-controls="v-pills-eventdesc_<%= event.name%>" aria-selected="false"><%= event.location + " | " + event.starttime + " | " + event.name%></button>
+            
+          <% }) %>
+        </div>
+
+        <div class="tab-content" id="eventbuttons-tabcontent">
+          <% events.forEach(function(event, index){ %>
+            <div class="tab-pane fade" id="v-pills-eventdesc_<%= event.name%>" role="tabpanel" aria-labelledby="v-pills-event-tab_<%= event.name%>"><%= event.description %></div>
+          <% }) %>
+          
+          
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
+
+    
+    <script>
+      
+      const socket = io();
+
+      // socket.on('gpiomessage', (message) => {
+      //   console.log('received', message);
+      //   const element = document.getElementById("v-pills-event-tab_" + "parkrun");
+      //   const element2 = document.getElementById("v-pills-eventdesc_" + "parkrun");
+      //   console.log(element.ariaSelected)
+      //   element.setAttribute('aria-selected', "true")
+      //   element.setAttribute('class', 'nav-link active')
+      //   element2.setAttribute('class', 'tab-pane fade active show')
+        
+      //   console.log(element.ariaselected)
+
+      // });
+
+      var button1counter = 0
+      var button2counter = 0
+      var button3counter = 0
+
+      const location1elements = []
+      const location2elements = []
+      const location3elements = []
+
+      const location1descs = [] 
+      const location2descs = []
+      const location3descs = []
+
+      // socket.on('serverbutton1pressed', (location1events) => {
+      //   const element = document.getElementById("v-pills-event-tab_" + location1events[0].name);
+      //   const element2 = document.getElementById("v-pills-eventdesc_" + location1events[0].name);
+      
+      //   element.setAttribute('aria-selected', "true")
+      //   element.setAttribute('class', 'nav-link active')
+      //   element2.setAttribute('class', 'tab-pane fade active show')
+      // })
+
+      socket.on('refresh', (value) => {
+          window.location.reload();
+      })
+
+      socket.on('serverbutton1pressed', (location1events) => {
+      
+      if (button1counter >= location1events.length){
+        button1counter = 0
+      }
+
+      for(let i = 0; i < location1events.length; i++){
+        location1elements[i] = document.getElementById("v-pills-event-tab_" + location1events[i].name);
+        location1descs[i] = document.getElementById("v-pills-eventdesc_" + location1events[i].name);
+      }
+
+      location1elements.forEach((element) => {
+        element.setAttribute('aria-selected', 'false')
+        element.setAttribute('class', 'nav-link')
+      })
+      location1descs.forEach((elementdesc) => {
+        elementdesc.setAttribute('class', 'tab-pane fade')
+      })
+
+      location2elements.forEach((element) => {
+        element.setAttribute('aria-selected', 'false')
+        element.setAttribute('class', 'nav-link')
+      })
+      location2descs.forEach((elementdesc) => {
+        elementdesc.setAttribute('class', 'tab-pane fade')
+      })
+
+      location3elements.forEach((element) => {
+        element.setAttribute('aria-selected', 'false')
+        element.setAttribute('class', 'nav-link')
+      })
+      location3descs.forEach((elementdesc) => {
+        elementdesc.setAttribute('class', 'tab-pane fade')
+      })
+
+      location1elements[button1counter].setAttribute('aria-selected', 'true')
+      location1elements[button1counter].setAttribute('class', 'nav-link active')
+      location1descs[button1counter].setAttribute('class', 'tab-pane fade active show')
+
+
+      button1counter += 1
+
+    })
+
+    socket.on('serverbutton2pressed', (location2events) => {
+      
+      if (button2counter >= location2events.length){
+        button2counter = 0
+      }
+
+      for(let i = 0; i < location2events.length; i++){
+        location2elements[i] = document.getElementById("v-pills-event-tab_" + location2events[i].name);
+        location2descs[i] = document.getElementById("v-pills-eventdesc_" + location2events[i].name);
+      }
+
+      location1elements.forEach((element) => {
+        element.setAttribute('aria-selected', 'false')
+        element.setAttribute('class', 'nav-link')
+      })
+      location1descs.forEach((elementdesc) => {
+        elementdesc.setAttribute('class', 'tab-pane fade')
+      })
+
+      location2elements.forEach((element) => {
+        element.setAttribute('aria-selected', 'false')
+        element.setAttribute('class', 'nav-link')
+      })
+      location2descs.forEach((elementdesc) => {
+        elementdesc.setAttribute('class', 'tab-pane fade')
+      })
+
+      location3elements.forEach((element) => {
+        element.setAttribute('aria-selected', 'false')
+        element.setAttribute('class', 'nav-link')
+      })
+      location3descs.forEach((elementdesc) => {
+        elementdesc.setAttribute('class', 'tab-pane fade')
+      })
+
+      location2elements[button2counter].setAttribute('aria-selected', 'true')
+      location2elements[button2counter].setAttribute('class', 'nav-link active')
+      location2descs[button2counter].setAttribute('class', 'tab-pane fade active show')
+
+
+      button2counter += 1
+
+    })
+
+    socket.on('serverbutton3pressed', (location3events) => {
+      
+      if (button3counter >= location3events.length){
+        button3counter = 0
+      }
+
+      for(let i = 0; i < location3events.length; i++){
+        location3elements[i] = document.getElementById("v-pills-event-tab_" + location3events[i].name);
+        location3descs[i] = document.getElementById("v-pills-eventdesc_" + location3events[i].name);
+      }
+
+
+      location1elements.forEach((element) => {
+        element.setAttribute('aria-selected', 'false')
+        element.setAttribute('class', 'nav-link')
+      })
+      location1descs.forEach((elementdesc) => {
+        elementdesc.setAttribute('class', 'tab-pane fade')
+      })
+
+      location2elements.forEach((element) => {
+        element.setAttribute('aria-selected', 'false')
+        element.setAttribute('class', 'nav-link')
+      })
+      location2descs.forEach((elementdesc) => {
+        elementdesc.setAttribute('class', 'tab-pane fade')
+      })
+
+      location3elements.forEach((element) => {
+        element.setAttribute('aria-selected', 'false')
+        element.setAttribute('class', 'nav-link')
+      })
+      location3descs.forEach((elementdesc) => {
+        elementdesc.setAttribute('class', 'tab-pane fade')
+      })
+
+      location3elements[button3counter].setAttribute('aria-selected', 'true')
+      location3elements[button3counter].setAttribute('class', 'nav-link active')
+      location3descs[button3counter].setAttribute('class', 'tab-pane fade active show')
+
+
+      button3counter += 1
+
+    })
+     
+       
+    </script>
+
+</body>
+</html>
