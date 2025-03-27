@@ -237,31 +237,31 @@ function makeString(event){
   fileString += ",,,, " //adds separator
 }
 
-app.get('/events', (req,res) => {
-  res.render('events.ejs', {events: events, locationButton1: locationButton[0], locationButton2: locationButton[1], locationButton3: locationButton[2]})
-})
+app.get('/events', (req,res) => { //route for /events
+  res.render('events.ejs', {events: events}) //passes events to the .ejs file to be used for dynamically naming elements for reference
+}) 
 
-app.get('/booked', (req,res) => {
+app.get('/booked', (req,res) => {  //route for /booked
   res.render('booked.ejs')
 })
 
-app.use('/', express.static(path.join(currentFolder, 'public')))
+app.use('/', express.static(path.join(currentFolder, 'public'))) //static files from the /public directory can be accessed
 
-function refreshPage(){
+function refreshPage(){ //this function uses socketio to tell the .ejs file to refresh itself
   io.emit('refresh', true)
 }
 
-io.on('connection', (socket) => {
+io.on('connection', (socket) => { //the following deals with socketio client-server interactions
 
-  locationButton[0].watch((err, value) => {
-    if (value == 0){
+  locationButton[0].watch((err, value) => { //when the value of the GPIO voltage at this button changes the function executes
+    if (value == 0){ //if the button is pressed 
     
-      socket.emit('serverbutton1pressed', location1events)
+      socket.emit('serverbutton1pressed', location1events) //socketio tells the clientside .ejs file that the button has been pressed
       
     }
   })    
 
-  locationButton[1].watch((err, value) => {
+  locationButton[1].watch((err, value) => { //same for the 2nd button
     if (value == 0){
     
       socket.emit('serverbutton2pressed', location2events)
@@ -269,7 +269,7 @@ io.on('connection', (socket) => {
     }
   })    
 
-  locationButton[2].watch((err, value) => {
+  locationButton[2].watch((err, value) => { //same for the third button
     if (value == 0){
      
       socket.emit('serverbutton3pressed', location3events)

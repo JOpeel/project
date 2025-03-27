@@ -25,14 +25,15 @@
     <div class="d-flex align-items-start">
         <div class="nav flex-column nav-pills me-3" role="tablist" aria-orientation="vertical" id="eventbuttons">
           
-          <% events.forEach(function(event, index){ %>
+          <% events.forEach(function(event, index){ %> <!-- the events which are passed to the .ejs file from express are iterated through to display corresponding elements
+            These id of these elements is based on their name so they can be referenced, and the data target is set to the equivalent description -->
             <button class="nav-link" id="v-pills-event-tab_<%= event.name%>" data-bs-toggle="pill" data-bs-target="#v-pills-eventdesc_<%= event.name%>" type="button" role="tab" aria-controls="v-pills-eventdesc_<%= event.name%>" aria-selected="false"><%= event.location + " | " + event.starttime + " | " + event.name%></button>
             
           <% }) %>
         </div>
 
         <div class="tab-content" id="eventbuttons-tabcontent">
-          <% events.forEach(function(event, index){ %>
+          <% events.forEach(function(event, index){ %> <!-- the same as the above is done but for the descriptions that are invisible by default. They are set to be labelled  by the corresponding events tab. -->
             <div class="tab-pane fade" id="v-pills-eventdesc_<%= event.name%>" role="tabpanel" aria-labelledby="v-pills-event-tab_<%= event.name%>"><%= event.description %></div>
           <% }) %>
           
@@ -48,91 +49,69 @@
     
     <script>
       
-      const socket = io();
+      const socket = io(); //defines the socket in this file
 
-      // socket.on('gpiomessage', (message) => {
-      //   console.log('received', message);
-      //   const element = document.getElementById("v-pills-event-tab_" + "parkrun");
-      //   const element2 = document.getElementById("v-pills-eventdesc_" + "parkrun");
-      //   console.log(element.ariaSelected)
-      //   element.setAttribute('aria-selected', "true")
-      //   element.setAttribute('class', 'nav-link active')
-      //   element2.setAttribute('class', 'tab-pane fade active show')
-        
-      //   console.log(element.ariaselected)
-
-      // });
-
-      var button1counter = 0
+      var button1counter = 0 //these count the number of times a button has been pressed to refer to the correct event for each location
       var button2counter = 0
       var button3counter = 0
 
-      const location1elements = []
+      const location1elements = [] //arrays are used for the event elements of each location
       const location2elements = []
       const location3elements = []
 
-      const location1descs = [] 
+      const location1descs = [] //and the description elements of each location
       const location2descs = []
       const location3descs = []
 
-      // socket.on('serverbutton1pressed', (location1events) => {
-      //   const element = document.getElementById("v-pills-event-tab_" + location1events[0].name);
-      //   const element2 = document.getElementById("v-pills-eventdesc_" + location1events[0].name);
-      
-      //   element.setAttribute('aria-selected', "true")
-      //   element.setAttribute('class', 'nav-link active')
-      //   element2.setAttribute('class', 'tab-pane fade active show')
-      // })
-
       socket.on('refresh', (value) => {
-          window.location.reload();
+          window.location.reload(); //the page can be refreshed upon receiving this message from the server e.g. to dynamically update appearance in response to form submission
       })
 
-      socket.on('serverbutton1pressed', (location1events) => {
+      socket.on('serverbutton1pressed', (location1events) => { //when the client receives the message that button1 has been pressed, the following code is executed
       
-      if (button1counter >= location1events.length){
+      if (button1counter >= location1events.length){ //resets which event is being referred to after cycling through each event to reveal descriptions
         button1counter = 0
       }
 
-      for(let i = 0; i < location1events.length; i++){
+      for(let i = 0; i < location1events.length; i++){ //iterates through elements to store them in array by referring to their id using passed events
         location1elements[i] = document.getElementById("v-pills-event-tab_" + location1events[i].name);
         location1descs[i] = document.getElementById("v-pills-eventdesc_" + location1events[i].name);
       }
 
-      location1elements.forEach((element) => {
+      location1elements.forEach((element) => { //sets each tab to inactive for location
         element.setAttribute('aria-selected', 'false')
         element.setAttribute('class', 'nav-link')
       })
-      location1descs.forEach((elementdesc) => {
+      location1descs.forEach((elementdesc) => { //sets each description to invisible for location
         elementdesc.setAttribute('class', 'tab-pane fade')
       })
 
-      location2elements.forEach((element) => {
+      location2elements.forEach((element) => { //as above
         element.setAttribute('aria-selected', 'false')
         element.setAttribute('class', 'nav-link')
       })
-      location2descs.forEach((elementdesc) => {
+      location2descs.forEach((elementdesc) => { //as above
         elementdesc.setAttribute('class', 'tab-pane fade')
       })
 
       location3elements.forEach((element) => {
-        element.setAttribute('aria-selected', 'false')
+        element.setAttribute('aria-selected', 'false') //as above
         element.setAttribute('class', 'nav-link')
       })
-      location3descs.forEach((elementdesc) => {
+      location3descs.forEach((elementdesc) => { //as above
         elementdesc.setAttribute('class', 'tab-pane fade')
       })
 
-      location1elements[button1counter].setAttribute('aria-selected', 'true')
+      location1elements[button1counter].setAttribute('aria-selected', 'true') //sets correct event tab to be active
       location1elements[button1counter].setAttribute('class', 'nav-link active')
-      location1descs[button1counter].setAttribute('class', 'tab-pane fade active show')
+      location1descs[button1counter].setAttribute('class', 'tab-pane fade active show') //and shows descritpion
 
 
-      button1counter += 1
+      button1counter += 1 //increments counter to change event being referred to on next button press
 
     })
 
-    socket.on('serverbutton2pressed', (location2events) => {
+    socket.on('serverbutton2pressed', (location2events) => { //as above for button 2
       
       if (button2counter >= location2events.length){
         button2counter = 0
@@ -176,7 +155,7 @@
 
     })
 
-    socket.on('serverbutton3pressed', (location3events) => {
+    socket.on('serverbutton3pressed', (location3events) => { //as above for button 3
       
       if (button3counter >= location3events.length){
         button3counter = 0
